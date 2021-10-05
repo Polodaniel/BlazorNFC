@@ -9,7 +9,7 @@ namespace BlazorNFC.Data.NFC
     {
         public EntidadeJSON()
         {
-            DataNascimento = DateTime.Now;
+            Data = DateTime.Now;
             Hash = Guid.NewGuid();
         }
 
@@ -17,6 +17,6 @@ namespace BlazorNFC.Data.NFC
         
         public Guid Hash { get; set; }
         
-        public DateTime? DataNascimento { get; set; }
+        public DateTime? Data { get; set; }
     }
 }

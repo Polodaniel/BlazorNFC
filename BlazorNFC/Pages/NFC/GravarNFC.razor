@@ -16,19 +16,29 @@
                         <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
                     }
 
-                    <section class="ma-4">
+                    <section class="mx-4 my-3">
                         <MudText Typo="Typo.overline">
                             Dados do Dispositivo
                         </MudText>
-                        <MudGrid>
-                            <MudItem xs="12" sm="12" md="3" lg="3" xl="3" xxl="3">
-                                <MudText Typo="Typo.overline">
+                        <MudGrid Spacing="0">
+                            <MudItem xs="4" sm="3" md="3" lg="3" xl="3" xxl="3">
+                                <MudText Typo="Typo.caption">
                                     Dispositivo
                                 </MudText>
                             </MudItem>
-                            <MudItem xs="12" sm="12" md="9" lg="9" xl="9" xxl="9">
-                                <MudText Typo="Typo.overline" Color="@StatusDispositivoColor">
+                            <MudItem xs="8" sm="9" md="9" lg="9" xl="9" xxl="9">
+                                <MudText Typo="Typo.caption" Color="@StatusDispositivoColor">
                                     @StatusDispositivoText
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="4" sm="3" md="3" lg="3" xl="3" xxl="3">
+                                <MudText Typo="Typo.caption">
+                                    Operação
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="8" sm="9" md="9" lg="9" xl="9" xxl="9">
+                                <MudText Typo="Typo.caption" Color="@OperacaoColor">
+                                    @OperacaoText
                                 </MudText>
                             </MudItem>
                         </MudGrid>
@@ -54,7 +64,7 @@
                         </MudItem>
                         <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
                             <MudDatePicker Label="Data de Nascimento"
-                                           @bind-Date="Model.DataNascimento"
+                                           @bind-Date="Model.Data"
                                            ReadOnly="false"
                                            DateFormat="dd/MM/yyyy"
                                            PickerVariant="PickerVariant.Dialog" />
@@ -74,7 +84,9 @@
                                Variant="Variant.Filled"
                                StartIcon="@Icons.Material.Rounded.Nfc"
                                Size="Size.Small"
-                               Color="Color.Primary">Gravar NFC</MudButton>
+                               Color="Color.Primary"
+                               OnClick="GravarNFC"
+                               Disabled="Load">Gravar NFC</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>

@@ -15,14 +15,15 @@ namespace BlazorNFC.Pages.NFC
         protected Color StatusDispositivoColor { get; set; }
 
         protected bool StatusDispositivo { get; set; }
-        
+
         protected string StatusDispositivoText { get; set; }
+
+        protected string OperacaoText { get; set; }
+        protected Color OperacaoColor { get; set; }
 
         private DotNetObjectReference<GravarNFCBase> ViewRef;
 
         protected EntidadeJSON Model { get; set; }
-
-        private PoloNFC NFC { get; set; }
 
         public GravarNFCBase()
         {
@@ -30,11 +31,11 @@ namespace BlazorNFC.Pages.NFC
 
             Model = new EntidadeJSON();
 
-            NFC = new PoloNFC();
-
             StatusDispositivoText = "...";
+            MudarTextoOperacao("Aguardando operação");
 
             StatusDispositivoColor = Color.Default;
+            OperacaoColor = Color.Default;
 
             Load = false;
         }
@@ -58,18 +59,75 @@ namespace BlazorNFC.Pages.NFC
         }
 
         [JSInvokable]
-        public async void VerificaDispositivo(bool Status)
+        public void VerificaDispositivo(bool Status)
         {
             StatusDispositivo = Status;
 
             StatusDispositivoText = Status ? "Válido" : "Não localizado";
-
             StatusDispositivoColor = Status ? Color.Success : Color.Error;
 
             Load = false;
 
             StateHasChanged();
         }
+
+        public bool ValidaInformacoes()
+        {
+            if (string.IsNullOrEmpty(Model.Nome))
+            {
+                Snackbar.Add("Oops! O Nome é obrigatório!", Severity.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task GravarNFC()
+        {
+            if (ValidaInformacoes())
+            {
+                Load = true;
+                MudarTextoOperacao("Gravando NFC");
+
+                StateHasChanged();
+
+                await Task.Delay(3000);
+
+                await JS.InvokeVoidAsync("GravarJsonNFC", ViewRef, Model);
+
+            }
+        }
+
+        [JSInvokable]
+        public void GravarNFC(bool result)
+        {
+            Load = false;
+
+            MudarTextoOperacao("Aguardando operação");
+
+            if (result)
+                Snackbar.Add("NFC grava com sucesso!", Severity.Success);
+            else
+                Snackbar.Add("Oops! Ocorreu um erro ao gravar o NFC!", Severity.Error);
+
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void ErroNFC(string msg)
+        {
+            Load = false;
+
+            MudarTextoOperacao("Aguardando operação");
+
+            Snackbar.Add(string.Concat("Oops! ", msg), Severity.Error);
+
+            StateHasChanged();
+        }
+
+        private void MudarTextoOperacao(string Text) =>
+            OperacaoText = Text;
+
 
         protected IEnumerable<string> MaxCharacters(string ch)
         {
