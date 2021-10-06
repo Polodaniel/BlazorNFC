@@ -6,6 +6,25 @@
     Gravar NFC
 </MudText>
 
+<MudExpansionPanels MultiExpansion="true">
+    <MudExpansionPanel IsInitiallyExpanded="true">
+        <TitleContent>
+            <MudText Typo="Typo.overline">Verificações</MudText>
+        </TitleContent>
+        <ChildContent>
+            Panel Content
+        </ChildContent>
+    </MudExpansionPanel>
+    <MudExpansionPanel IsInitiallyExpanded="true">
+        <TitleContent>
+            <MudText Typo="Typo.overline">Informações</MudText>
+        </TitleContent>
+        <ChildContent>
+            Panel Content
+        </ChildContent>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
 <section class="d-flex justify-center">
     <MudGrid>
         <MudItem xs="12" sm="12" md="5" lg="5" xl="5" xxl="5">
@@ -64,16 +83,16 @@
                         </MudItem>
                         <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
                             <MudDatePicker Label="Data de Nascimento"
-                                           @bind-Date="Model.Data"
+                                           @bind-Date="Model.DataValidade"
                                            ReadOnly="false"
                                            DateFormat="dd/MM/yyyy"
                                            PickerVariant="PickerVariant.Dialog" />
                         </MudItem>
                         <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                            <MudTextField T="Guid"
+                            <MudTextField T="string"
                                           Immediate="true"
                                           Label="Hash"
-                                          @bind-Value="Model.Hash"
+                                          @bind-Value="Model.ChaveHash"
                                           Disabled="true"
                                           Variant="Variant.Text" />
                         </MudItem>

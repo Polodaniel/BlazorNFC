@@ -12,6 +12,8 @@ namespace BlazorNFC.Pages.NFC
 {
     public class GravarNFCBase : BaseComponent, IDisposable
     {
+        public MudMessageBox mbox { get; set; }
+
         protected Color StatusDispositivoColor { get; set; }
 
         protected bool StatusDispositivo { get; set; }
@@ -38,14 +40,13 @@ namespace BlazorNFC.Pages.NFC
             OperacaoColor = Color.Default;
 
             Load = false;
+
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-            {
                 await VerificaDispositivo();
-            }
         }
 
         public async Task VerificaDispositivo()
