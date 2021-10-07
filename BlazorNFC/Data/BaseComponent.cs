@@ -17,5 +17,11 @@ namespace BlazorNFC.Data
         public IJSRuntime JS { get; set; }
 
         public bool Load { get; set; }
+
+        public void Menssagem(string Messagem, Severity Tipo) 
+        {
+            Snackbar.Clear();
+            Snackbar.Add(Messagem, Tipo);
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using BlazorNFC.Data.NFC;
+﻿using BlazorNFC.Data;
+using BlazorNFC.Data.NFC;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -8,14 +10,21 @@ using System.Threading.Tasks;
 
 namespace BlazorNFC.Pages.NFC
 {
-    public class NovoCartaoBase : ComponentBase
+    public class NovoCartaoBase : BaseComponent, IDisposable
     {
-        protected bool CriarCartaoView { get; set; }
-
-        protected MudDatePicker _picker;
-
+        #region Propriedades
         protected EntidadeJSON Model { get; set; }
 
+        protected bool CriarCartaoView { get; set; }
+
+        protected MudDatePicker _picker { get; set; }
+
+        protected List<EntidadeValidacao> ListaValidacoes { get; set; }
+
+        public DotNetObjectReference<NovoCartaoBase> ViewRef;
+        #endregion
+
+        #region Construtor
         public NovoCartaoBase()
         {
             CriarCartaoView = true;
@@ -23,16 +32,84 @@ namespace BlazorNFC.Pages.NFC
             Model = new EntidadeJSON();
 
             _picker = new MudDatePicker();
+
+            ViewRef = DotNetObjectReference.Create(this);
+
+            ListaValidacoes = new List<EntidadeValidacao>();
+        }
+        #endregion
+
+        #region Eventos
+
+        #region Eventos Tela
+        protected override void OnInitialized()
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+
+            MontarListaValidacao();
         }
 
-        public void GerarCartao() 
+        private void MontarListaValidacao()
         {
+            ListaValidacoes.Add(new EntidadeValidacao(1, "Informação validas", true));
+            ListaValidacoes.Add(new EntidadeValidacao(2, "Navegador", null));
+            ListaValidacoes.Add(new EntidadeValidacao(3, "Hardware NFC", null));
+        }
+
+        public async void GerarCartao()
+        {
+            if (string.IsNullOrEmpty(Model.Nome))
+            {
+                Menssagem("Ops! O nome deve-se ser informado.", Severity.Error);
+                return;
+            }
+
             CriarCartaoView = false;
+
+            await RealizaValidacoes();
+        }
+
+        private async Task RealizaValidacoes()
+        {
+            ListaValidacoes.ForEach(async x =>
+            {
+                if (x.ID == 2)
+                    await VerificaDispositivo();
+                else if (x.ID == 3)
+                    await VerificaHardware();
+            });
         }
 
         public void VoltarCriarCartao()
         {
             CriarCartaoView = true;
         }
+
+        public void Dispose()
+        {
+
+        }
+        #endregion
+
+        #region Eventos JS
+        public async Task VerificaDispositivo() =>
+            await JS.InvokeVoidAsync("VerificaDispositivo", ViewRef, 2);
+
+        public async Task VerificaHardware() =>
+            await JS.InvokeVoidAsync("VerificaHardware", ViewRef, 3);
+
+        [JSInvokable]
+        public void RetornoVerificacoes(int ID, bool Status)
+        {
+            var Item = ListaValidacoes.Where(x => x.ID == ID).FirstOrDefault();
+
+            if (!Equals(Item, null))
+                Item.Status = Status;
+
+            StateHasChanged();
+        }
+        #endregion
+
+        #endregion
     }
 }

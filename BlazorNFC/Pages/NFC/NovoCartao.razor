@@ -8,54 +8,55 @@
     </MudText>
 </section>
 
-@if (CriarCartaoView)
+
+@if (!Equals(Model, null))
 {
-    if (!Equals(Model, null))
-    {
-        <section>
-            <MudGrid>
-                <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                    <section class="d-flex justify-center pt-2">
-                        <input type="checkbox" id="switch" />
-                        <label class="flip-container" for="switch">
-                            <div class="flipper">
-                                <div class="front rounded-lg">
-                                    <img src="./img/CartaoFrenteLogo.png" />
-                                    <div style="position: absolute; top: 63%; left: 10%">
-                                        <MudText Typo="Typo.h6">
-                                            @Model.ChaveHash
-                                        </MudText>
-                                    </div>
-                                    <div style="position: absolute; top: 76%; left: 10%">
-                                        <MudText Typo="Typo.body1">
-                                            @Model.Nome
-                                        </MudText>
-                                    </div>
-                                    <div style="position: absolute; top: 68%; left: 76%">
-                                        <MudText Typo="Typo.overline">
-                                            Validade
-                                        </MudText>
-                                    </div>
-                                    <div style="position: absolute; top: 76%; left: 76%">
-                                        <MudText Typo="Typo.body1">
-                                            @Model.DataValidade?.ToString("MM/yy")
-                                        </MudText>
-                                    </div>
+    <section>
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+                <section class="d-flex justify-center pt-2">
+                    <input type="checkbox" id="switch" />
+                    <label class="flip-container" for="switch">
+                        <div class="flipper">
+                            <div class="front rounded-lg">
+                                <img src="./img/CartaoFrenteLogo.png" />
+                                <div style="position: absolute; top: 63%; left: 10%">
+                                    <MudText Typo="Typo.h6">
+                                        @Model.ChaveHash
+                                    </MudText>
                                 </div>
-                                <div class="back rounded-lg">
-                                    <img src="./img/CartaoFundoLogo.png" />
-                                    <div style="position: absolute; top: 30%; left: 84%">
-                                        <MudText Typo="Typo.h6">
-                                            @Model.Chave
-                                        </MudText>
-                                    </div>
+                                <div style="position: absolute; top: 76%; left: 10%">
+                                    <MudText Typo="Typo.body1">
+                                        @Model.Nome
+                                    </MudText>
+                                </div>
+                                <div style="position: absolute; top: 68%; left: 76%">
+                                    <MudText Typo="Typo.overline">
+                                        Validade
+                                    </MudText>
+                                </div>
+                                <div style="position: absolute; top: 76%; left: 76%">
+                                    <MudText Typo="Typo.body1">
+                                        @Model.DataValidade?.ToString("MM/yy")
+                                    </MudText>
                                 </div>
                             </div>
-                        </label>
-                    </section>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                    <MudPaper Class="rounded-lg px-5 pt-4 pb-3" Outlined="true">
+                            <div class="back rounded-lg">
+                                <img src="./img/CartaoFundoLogo.png" />
+                                <div style="position: absolute; top: 30%; left: 84%">
+                                    <MudText Typo="Typo.h6">
+                                        @Model.Chave
+                                    </MudText>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                </section>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+                <MudPaper Class="rounded-lg px-5 pt-4 pb-3" Outlined="true">
+                    @if (CriarCartaoView)
+                    {
                         <MudGrid Spacing="1">
                             <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                                 <MudText Typo="Typo.subtitle2">
@@ -99,30 +100,77 @@
                                 </MudDatePicker>
                             </MudItem>
                         </MudGrid>
-
                         <section class="mt-5 d-flex justify-end">
                             <MudButton DisableElevation="true"
                                        Variant="Variant.Filled"
-                                       StartIcon="@Icons.Material.Rounded.CreditCard"
+                                       EndIcon="@Icons.Material.Rounded.ArrowForwardIos"
                                        Size="Size.Small"
                                        OnClick="GerarCartao"
-                                       Color="Color.Primary">Gerar Cartão</MudButton>
+                                       Color="Color.Primary">Avançar</MudButton>
                         </section>
+                    }
+                    else
+                    {
+                        <MudGrid Spacing="1">
+                            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                                <MudText Typo="Typo.subtitle2">
+                                    Verificações
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                                @if (!Equals(ListaValidacoes, null) && ListaValidacoes.Count > 0)
+                                {
+                                    <MudList Dense="true">
+                                        <Virtualize Items="ListaValidacoes">
+                                            <MudListItem>
+                                                <section class="d-flex justify-space-between">
+                                                    <MudText>
+                                                        @context.Operacao
+                                                    </MudText>
+                                                    <MudText>
+                                                        @if (context.Status == null)
+                                                        {
+                                                            <MudProgressCircular Color="Color.Default" Size="Size.Small" Indeterminate="true" />
+                                                        }
+                                                        else if (context.Status == true)
+                                                        {
+                                                            <MudIcon Icon="@Icons.Material.Rounded.CheckCircleOutline" Color="Color.Success" />
+                                                        }
+                                                        else if (context.Status == false)
+                                                        {
+                                                            <MudIcon Icon="@Icons.Material.Rounded.Close" Color="Color.Error" />
+                                                        }
+                                                    </MudText>
+                                                </section>
+                                            </MudListItem>
+                                            <MudDivider />
+                                        </Virtualize>
+                                    </MudList>
+                                }
+                            </MudItem>
+                        </MudGrid>
+                        <section class="mt-7 d-flex justify-space-between">
+                            @if (!Equals(ListaValidacoes, null) && ListaValidacoes.Count > 0)
+                            {
+                                <MudButton DisableElevation="true"
+                                           Variant="Variant.Text"
+                                           StartIcon="@Icons.Material.Rounded.ArrowBackIosNew"
+                                           Size="Size.Small"
+                                           OnClick="VoltarCriarCartao"
+                                           Color="Color.Default">Voltar</MudButton>
 
-                    </MudPaper>
-                </MudItem>
-            </MudGrid>
-        </section>
-    }
-}else
-{
-    <section class="mt-5 d-flex justify-end">
-    <MudButton DisableElevation="true"
-               Variant="Variant.Filled"
-               StartIcon="@Icons.Material.Rounded.CreditCard"
-               Size="Size.Small"
-               OnClick="VoltarCriarCartao"
-               Color="Color.Primary">Voltar</MudButton>
-</section>
-
+                                <MudButton DisableElevation="true"
+                                           Variant="Variant.Filled"
+                                           StartIcon="@Icons.Material.Rounded.CreditCard"
+                                           Size="Size.Small"
+                                           OnClick="VoltarCriarCartao"
+                                           Disabled="(ListaValidacoes.Where(x => x.Status != true).Any())"
+                                           Color="Color.Primary">Gerar Cartão</MudButton>
+                            }
+                        </section>
+                    }
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </section>
 }

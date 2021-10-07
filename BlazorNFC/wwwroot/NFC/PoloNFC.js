@@ -10,13 +10,13 @@ function VerificarStatusDispositivo()
 }
 
 //Retorna para o C# a verificação do Dispositivo
-function VerificaDispositivo(dotNetHelper)
+function VerificaDispositivo(dotNetHelper, ID)
 {
     if (VerificarStatusDispositivo()) {
-        dotNetHelper.invokeMethodAsync('VerificaDispositivo', true);
+        dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
     }
     else {
-        dotNetHelper.invokeMethodAsync('VerificaDispositivo', false);
+        dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
     }
 }
 
@@ -31,7 +31,7 @@ async function GravarJsonNFC(dotNetHelper, item)
 
             const ndef = new NDEFReader();
 
-            await ndef.write("Hello world!");
+         /*   await ndef.write("Hello world!");*/
 
             const encoder = new TextEncoder();
 
@@ -63,5 +63,16 @@ async function GravarJsonNFC(dotNetHelper, item)
     else
     {
         dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
+    }
+}
+
+// Verifica HARDWARE
+function VerificaHardware(dotNetHelper, ID)
+{
+    try {
+        const ndef = new NDEFReader();
+        dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
+    } catch (err) {
+        dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
     }
 }
