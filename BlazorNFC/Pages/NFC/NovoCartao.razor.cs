@@ -95,7 +95,7 @@ namespace BlazorNFC.Pages.NFC
                 MaxWidth = MaxWidth.Medium
             };
 
-            var result = await DialogService.Show<DialogNFC>("Gerar NFC").Result;
+            var result = await DialogService.Show<DialogNFC>("Gerar NFC", Parameters, Options).Result;
 
             if (!result.Cancelled)
             {

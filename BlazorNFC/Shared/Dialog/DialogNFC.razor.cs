@@ -18,13 +18,14 @@ namespace BlazorNFC.Shared.Dialog
         public MudDialogInstance MudDialog { get; set; }
 
         [Parameter]
+        public EntidadeJSON Model { get; set; }
+
         public StatusNFC Status { get; set; }
         #endregion
 
         #region Propriedades
         protected string TextoOperacao { get; set; }
 
-        protected EntidadeJSON Model { get; set; }
 
         public DotNetObjectReference<DialogNFCBase> ViewRef;
         #endregion
