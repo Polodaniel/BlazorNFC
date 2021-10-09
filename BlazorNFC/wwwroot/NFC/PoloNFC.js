@@ -70,6 +70,8 @@ function VerificaHardware(dotNetHelper, ID)
 {
     try {
         const ndef = new NDEFReader();
+        await ndef.scan();
+
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
     } catch (err) {
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
