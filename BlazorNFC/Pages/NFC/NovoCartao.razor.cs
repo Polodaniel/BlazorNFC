@@ -113,7 +113,7 @@ namespace BlazorNFC.Pages.NFC
 
         #region Eventos JS
         public async Task VerificaDispositivo() =>
-            await JS.InvokeVoidAsync("VerificaDispositivo", ViewRef, 2);
+            await JS.InvokeVoidAsync("VerificaDispositivoNFC", ViewRef, 2);
 
         public async Task VerificaHardware() =>
             await JS.InvokeVoidAsync("VerificaHardware", ViewRef, 3);

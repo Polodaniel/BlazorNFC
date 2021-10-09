@@ -12,7 +12,7 @@ function VerificarStatusDispositivo() {
 }
 
 //Retorna para o C# a verificação do Dispositivo
-function VerificaDispositivo(dotNetHelper, ID) {
+function VerificaDispositivoNFC(dotNetHelper, ID) {
     console.log("AA");
     if (VerificarStatusDispositivo()) {
         console.log("AAA");
@@ -72,7 +72,7 @@ async function GravarJsonNFC(dotNetHelper, item) {
 }
 
 // Verifica HARDWARE
-function VerificaHardware(dotNetHelper, ID) {
+async function VerificaHardware(dotNetHelper, ID) {
     try {
         const ndef = new NDEFReader();
         await ndef.scan();
