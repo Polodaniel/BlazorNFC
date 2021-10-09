@@ -1,5 +1,6 @@
 ﻿using BlazorNFC.Data;
 using BlazorNFC.Data.NFC;
+using BlazorNFC.Shared.Dialog;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -56,7 +57,7 @@ namespace BlazorNFC.Pages.NFC
             ListaValidacoes.Add(new EntidadeValidacao(3, "Hardware NFC", null));
         }
 
-        public async void GerarCartao()
+        protected async void ValidarInformacoes()
         {
             if (string.IsNullOrEmpty(Model.Nome))
             {
@@ -80,9 +81,28 @@ namespace BlazorNFC.Pages.NFC
             });
         }
 
-        public void VoltarCriarCartao()
-        {
+        protected void VoltarCriarCartao() =>
             CriarCartaoView = true;
+
+        protected async Task<bool> GerarCartao() 
+        {
+            var Parameters = new DialogParameters();
+            Parameters.Add("Model", Model);
+
+            var Options = new DialogOptions()
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.Medium
+            };
+
+            var result = await DialogService.Show<DialogNFC>("Gerar NFC").Result;
+
+            if (!result.Cancelled)
+            {
+                //license_accepted = (bool)(result.Data ?? false);
+            }
+
+            return true;
         }
 
         public void Dispose()

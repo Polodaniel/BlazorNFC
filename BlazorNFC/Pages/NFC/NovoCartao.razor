@@ -105,7 +105,7 @@
                                        Variant="Variant.Filled"
                                        EndIcon="@Icons.Material.Rounded.ArrowForwardIos"
                                        Size="Size.Small"
-                                       OnClick="GerarCartao"
+                                       OnClick="ValidarInformacoes"
                                        Color="Color.Primary">Avançar</MudButton>
                         </section>
                     }
@@ -159,12 +159,19 @@
                                            OnClick="VoltarCriarCartao"
                                            Color="Color.Default">Voltar</MudButton>
 
+                                @*<MudButton DisableElevation="true"
+                                    Variant="Variant.Filled"
+                                    StartIcon="@Icons.Material.Rounded.CreditCard"
+                                    Size="Size.Small"
+                                    OnClick="VoltarCriarCartao"
+                                    Disabled="(ListaValidacoes.Where(x => x.Status != true).Any())"
+                                    Color="Color.Primary">Gerar Cartão</MudButton>*@
+
                                 <MudButton DisableElevation="true"
                                            Variant="Variant.Filled"
                                            StartIcon="@Icons.Material.Rounded.CreditCard"
                                            Size="Size.Small"
-                                           OnClick="VoltarCriarCartao"
-                                           Disabled="(ListaValidacoes.Where(x => x.Status != true).Any())"
+                                           OnClick="GerarCartao"
                                            Color="Color.Primary">Gerar Cartão</MudButton>
                             }
                         </section>

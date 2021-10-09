@@ -1,0 +1,61 @@
+﻿@inherits DialogNFCBase
+
+<MudDialog DisableSidePadding="true" ClassContent="pa-0" Class="w-dialog">
+    <DialogContent>
+
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Class="d-flex justify-center pa-0">
+
+                @if (Equals(Status, StatusNFC.Iniciando) || Equals(Status, StatusNFC.Buscando))
+                {
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_0akluyjw.json"
+                                   background="transparent"
+                                   speed="1"
+                                   style="width: 200px; height: 200px;"
+                                   loop autoplay></lottie-player>
+                }
+                else if (Equals(Status, StatusNFC.Error))
+                {
+                    <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_0y2hn5kf.json"
+                                   background="transparent"
+                                   speed="1"
+                                   style="width: 200px; height: 200px;"
+                                   loop autoplay></lottie-player>
+                }
+                else if (Equals(Status, StatusNFC.Concluido))
+                {
+                    <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_fzxna3xo.json"
+                                   background="transparent"
+                                   speed="1"
+                                   style="width: 200px; height: 200px;"
+                                   loop autoplay></lottie-player>
+                }
+
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Class="d-flex justify-center pa-0 pb-8">
+                @if (Equals(Status, StatusNFC.Iniciando) || Equals(Status, StatusNFC.Buscando))
+                {
+                    <MudText Typo="Typo.overline" Style="font-size: 17px;">@TextoOperacao</MudText>
+                }
+                else if (Equals(Status, StatusNFC.Error))
+                {
+                    <MudAlert Severity="Severity.Error" Style="width: 80%;">@TextoOperacao</MudAlert>
+                }
+                else if (Equals(Status, StatusNFC.Concluido))
+                {
+                    <MudAlert Severity="Severity.Success" Style="width: 80%;">@TextoOperacao</MudAlert>
+                }
+
+            </MudItem>
+        </MudGrid>
+
+    </DialogContent>
+    <DialogActions>
+        @if (Equals(Status, StatusNFC.Error) || Equals(Status, StatusNFC.Concluido))
+        {
+            <MudButton Color="Color.Primary"
+                       OnClick="Close"
+                       Disabled="false">Fechar</MudButton>
+        }
+    </DialogActions>
+</MudDialog> 

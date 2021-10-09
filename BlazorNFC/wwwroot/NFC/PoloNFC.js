@@ -25,13 +25,12 @@ async function GravarJsonNFC(dotNetHelper, item)
 {
     if (VerificarStatusDispositivo()) {
         try {
-            //console.log("Nome: " + item.nome);
-            //console.log("Data de Nascimento: " + item.data);
-            //console.log("Hash: " + item.hash);
+            console.log("Nome: " + item.nome);
+            console.log("Chave Hash: " + item.chaveHash);
+            console.log("Chave: " + item.chave);
+            console.log("Data Validade: " + item.dataValidade);
 
             const ndef = new NDEFReader();
-
-         /*   await ndef.write("Hello world!");*/
 
             const encoder = new TextEncoder();
 
@@ -47,11 +46,11 @@ async function GravarJsonNFC(dotNetHelper, item)
                 }]
             };
 
-            //console.log(NovaInformacao);
+            console.log(NovaInformacao);
 
             await ndef.write(NovaInformacao);
 
-            dotNetHelper.invokeMethodAsync('GravarNFC', true);
+            dotNetHelper.invokeMethodAsync('GravadoNFC', true);
 
         } catch (error) {
 

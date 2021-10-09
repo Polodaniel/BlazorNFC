@@ -21,6 +21,7 @@ namespace BlazorNFC.Pages.NFC
         protected string StatusDispositivoText { get; set; }
 
         protected string OperacaoText { get; set; }
+
         protected Color OperacaoColor { get; set; }
 
         private DotNetObjectReference<GravarNFCBase> ViewRef;

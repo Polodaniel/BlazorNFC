@@ -11,6 +11,9 @@ namespace BlazorNFC.Data
     public class BaseComponent : ComponentBase
     {
         [Inject]
+        protected IDialogService DialogService { get; set; }
+
+        [Inject]
         protected ISnackbar Snackbar { get; set; }
 
         [Inject]
