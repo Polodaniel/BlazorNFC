@@ -1,6 +1,5 @@
 ﻿// Verifica se o dispositivo possui NFC
-function VerificarStatusDispositivo()
-{
+function VerificarStatusDispositivo() {
     console.log("2");
     if ("NDEFReader" in window) {
         console.log("3");
@@ -13,10 +12,12 @@ function VerificarStatusDispositivo()
 }
 
 //Retorna para o C# a verificação do Dispositivo
-function VerificaDispositivo(dotNetHelper, ID)
-{
+function VerificaDispositivo(dotNetHelper, ID) {
+    console.log("AA");
     if (VerificarStatusDispositivo()) {
+        console.log("AAA");
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
+        console.log("AAAA");
     }
     else {
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
@@ -24,8 +25,7 @@ function VerificaDispositivo(dotNetHelper, ID)
 }
 
 // Gravar um Objeto JSON no cartão NFC
-async function GravarJsonNFC(dotNetHelper, item)
-{
+async function GravarJsonNFC(dotNetHelper, item) {
     console.log("1");
     if (VerificarStatusDispositivo()) {
         try {
@@ -66,15 +66,13 @@ async function GravarJsonNFC(dotNetHelper, item)
             dotNetHelper.invokeMethodAsync('ErroNFC', error);
         }
     }
-    else
-    {
+    else {
         dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
     }
 }
 
 // Verifica HARDWARE
-function VerificaHardware(dotNetHelper, ID)
-{
+function VerificaHardware(dotNetHelper, ID) {
     try {
         const ndef = new NDEFReader();
         await ndef.scan();
