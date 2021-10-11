@@ -19,14 +19,9 @@ namespace BlazorNFC.Shared.Dialog
 
         [Parameter]
         public EntidadeJSON Model { get; set; }
-
-        public StatusNFC Status { get; set; }
         #endregion
 
         #region Propriedades
-        protected string TextoOperacao { get; set; }
-
-
         public DotNetObjectReference<DialogNFCBase> ViewRef;
         #endregion
 
@@ -48,13 +43,6 @@ namespace BlazorNFC.Shared.Dialog
             AjustarStatus(StatusNFC.Buscando, "Aproxime o cartão próximo ao sensor!");
 
             await JS.InvokeVoidAsync("GravarJsonNFC", ViewRef, Model);
-        }
-
-        private void AjustarStatus(StatusNFC StatusNovo, string Menssagem)
-        {
-            Status = StatusNovo;
-            TextoOperacao = Menssagem;
-            StateHasChanged();
         }
 
         protected void Close() =>

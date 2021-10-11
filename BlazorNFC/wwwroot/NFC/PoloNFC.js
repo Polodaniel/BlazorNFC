@@ -1,8 +1,6 @@
 ﻿// Verifica se o dispositivo possui NFC
 function VerificarStatusDispositivo() {
-    //console.log("2");
     if ("NDEFReader" in window) {
-        //console.log("3");
         return true;
     }
     else {
@@ -13,11 +11,8 @@ function VerificarStatusDispositivo() {
 
 //Retorna para o C# a verificação do Dispositivo
 function VerificaDispositivoNFC(dotNetHelper, ID) {
-    //console.log("AA");
     if (VerificarStatusDispositivo()) {
-        //console.log("AAA");
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
-        //console.log("AAAA");
     }
     else {
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
@@ -27,52 +22,33 @@ function VerificaDispositivoNFC(dotNetHelper, ID) {
 // Gravar um Objeto JSON no cartão NFC
 async function GravarJsonNFC(dotNetHelper, item) {
 
-    //console.log("5");
-    //console.log("Nome: " + item.nome);
-    //console.log("Chave Hash: " + item.chaveHash);
-    //console.log("Chave: " + item.chave);
-    //console.log("Data Validade: " + item.dataValidade);
-
-
-    //console.log("1");
     if (VerificarStatusDispositivo()) {
         try {
-            //console.log("5");
-            //console.log("Nome: " + item.nome);
-            //console.log("Chave Hash: " + item.chaveHash);
-            //console.log("Chave: " + item.chave);
-            //console.log("Data Validade: " + item.dataValidade);
 
             const ndef = new NDEFReader();
 
-            //console.log("6");
             const encoder = new TextEncoder();
-            //console.log("7");
+
             const NovaInformacao = {
                 records: [{
                     recordType: "mime",
                     mediaType: "application/json",
                     data: encoder.encode(JSON.stringify({
                         nome: item.nome,
-                        data: item.data,
-                        hash: item.hash
+                        chavehash: item.chaveHash,
+                        chave: item.chave,
+                        data: item.DataValidade,
                     }))
                 }]
             };
 
-            //console.log("8");
-            //console.log(NovaInformacao);
-
             await ndef.write(NovaInformacao);
-            //console.log("9");
-            dotNetHelper.invokeMethodAsync('GravadoNFC', true);
-            //console.log("10");
-        } catch (error) {
-            //console.log("11");
-            //console.log(error);
 
+        } catch (error) {
             dotNetHelper.invokeMethodAsync('ErroNFC', error);
         }
+
+        await dotNetHelper.invokeMethodAsync('GravadoNFC', true);
     }
     else {
         dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
@@ -86,5 +62,42 @@ async function VerificaHardware(dotNetHelper, ID) {
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, true);
     } catch (err) {
         dotNetHelper.invokeMethodAsync('RetornoVerificacoes', ID, false);
+    }
+}
+
+// Realiza a Leitura do NFC
+async function LerNFC(dotNetHelper) {
+    try {
+        const ndef = new NDEFReader();
+
+        await ndef.scan();
+
+        ndef.addEventListener("readingerror", () => {
+            dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
+        });
+
+        //ndef.addEventListener("reading", ({ message, serialNumber }) => {
+        //    log(`> Serial Number: ${serialNumber}`);
+        //    log(`> Records: (${message.records.length})`);
+        //});
+
+        ndef.onreading = (event) => {
+            const decoder = new TextDecoder();
+            for (const record of event.message.records) {
+                if (record.mediaType === "application/json") {
+                    const json = JSON.parse(decoder.decode(record.data));
+                    console.log(`Nome: ${json.nome}`);
+                    console.log(`ChaveHash: ${json.chavehash}`);
+                    console.log(`Chave: ${json.chave}`);
+                    console.log(`Data: ${json.data}`);
+
+                    dotNetHelper.invokeMethodAsync('LerNFC', json.nome, json.chavehash, json.chave, json.data);
+                }
+            }
+        };
+
+
+    } catch (err) {
+        dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
     }
 }

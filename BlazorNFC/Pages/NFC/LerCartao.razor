@@ -1,0 +1,117 @@
+﻿@page "/LerCartao"
+
+@inherits LerCartaoBase
+
+<section>
+    <MudText Typo="Typo.h6" Class="mb-3">
+        Ler Cartão
+    </MudText>
+</section>
+
+<section>
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+            <section class="d-flex justify-center">
+                <input type="checkbox" id="switch" />
+                <label class="flip-container" for="switch">
+                    <div class="flipper">
+                        <div class="front rounded-lg">
+                            <img src="./img/CartaoFrenteLogo.png" />
+                            @if (!Equals(Model, null))
+                            {
+                                <div style="position: absolute; top: 63%; left: 10%">
+                                    <MudText Typo="Typo.h6">
+                                        @Model.ChaveHash
+                                    </MudText>
+                                </div>
+                                <div style="position: absolute; top: 76%; left: 10%">
+                                    <MudText Typo="Typo.body1">
+                                        @Model.Nome
+                                    </MudText>
+                                </div>
+                                <div style="position: absolute; top: 68%; left: 76%">
+                                    <MudText Typo="Typo.overline">
+                                        Validade
+                                    </MudText>
+                                </div>
+                                <div style="position: absolute; top: 76%; left: 76%">
+                                    <MudText Typo="Typo.body1">
+                                        @Model.DataValidade?.ToString("MM/yy")
+                                    </MudText>
+                                </div>
+                            }
+                        </div>
+                        <div class="back rounded-lg">
+                            <img src="./img/CartaoFundoLogo.png" />
+                            @if (!Equals(Model, null))
+                            {
+                                <div style="position: absolute; top: 30%; left: 84%">
+                                    <MudText Typo="Typo.h6">
+                                        @Model.Chave
+                                    </MudText>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </label>
+            </section>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+            <MudPaper Class="rounded-lg px-5 pb-3" Outlined="true">
+
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Class="d-flex justify-center pa-0">
+
+                        @if (Equals(Status, StatusNFC.Iniciando) || Equals(Status, StatusNFC.Buscando))
+                        {
+                            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_0akluyjw.json"
+                                           background="transparent"
+                                           speed="1"
+                                           style="width: 180px; height: 180px; margin: 0px;"
+                                           loop autoplay></lottie-player>
+                        }
+                        else if (Equals(Status, StatusNFC.Error))
+                        {
+                            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_0y2hn5kf.json"
+                                           background="transparent"
+                                           speed="1"
+                                           style="width: 180px; height: 180px; margin: 0px;"
+                                           loop autoplay></lottie-player>
+                        }
+                        else if (Equals(Status, StatusNFC.Concluido))
+                        {
+                            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_fzxna3xo.json"
+                                           background="transparent"
+                                           speed="1"
+                                           style="width: 180px; height: 180px; margin: 0px;"
+                                           loop autoplay></lottie-player>
+                        }
+
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Class="d-flex justify-center pa-0">
+                        @if (Equals(Status, StatusNFC.Iniciando) || Equals(Status, StatusNFC.Buscando))
+                        {
+                            <MudText Typo="Typo.overline" Style="font-size: 17px; padding: 0px;">@TextoOperacao</MudText>
+                        }
+                        else if (Equals(Status, StatusNFC.Error))
+                        {
+                            <MudAlert Severity="Severity.Error" Style="width: 80%;">@TextoOperacao</MudAlert>
+                        }
+                        else if (Equals(Status, StatusNFC.Concluido))
+                        {
+                            <MudAlert Severity="Severity.Success" Style="width: 80%;">@TextoOperacao</MudAlert>
+                        }
+                    </MudItem>
+                </MudGrid>
+                <section class="mt-5 d-flex justify-end">
+                    <MudButton DisableElevation="true"
+                               Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Rounded.Nfc"
+                               Size="Size.Small"
+                               OnClick="LerCartaoNFC"
+                               Color="Color.Primary">Ler Cartão NFC</MudButton>
+                </section>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</section>
