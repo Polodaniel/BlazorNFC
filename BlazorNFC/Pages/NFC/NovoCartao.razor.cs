@@ -30,7 +30,7 @@ namespace BlazorNFC.Pages.NFC
         {
             CriarCartaoView = true;
 
-            Model = new EntidadeJSON();
+            Model = new EntidadeJSON(true);
 
             _picker = new MudDatePicker();
 

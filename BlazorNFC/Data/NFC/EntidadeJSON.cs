@@ -7,11 +7,14 @@ namespace BlazorNFC.Data.NFC
 {
     public class EntidadeJSON
     {
-        public EntidadeJSON()
+        public EntidadeJSON(bool DadosIniciais)
         {
-            DataValidade = DateTime.Now.AddYears(1);
-            ChaveHash = GerarChaveHash();
-            Chave = GerarChave();
+            if (DadosIniciais)
+            {
+                DataValidade = DateTime.Now.AddYears(1);
+                ChaveHash = GerarChaveHash();
+                Chave = GerarChave();
+            }
         }
 
         public string Nome { get; set; }

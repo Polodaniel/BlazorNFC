@@ -24,6 +24,8 @@ namespace BlazorNFC.Pages.NFC
         {
             Status = StatusNFC.Iniciando;
 
+            Model = new EntidadeJSON(false);
+
             TextoOperacao = string.Empty;
             ViewRef = DotNetObjectReference.Create(this);
         }
@@ -35,19 +37,19 @@ namespace BlazorNFC.Pages.NFC
             AjustarStatus(StatusNFC.Iniciando, "Sistema parado.");
         }
 
-        protected async void LerCartaoNFC() 
+        protected async void LerCartaoNFC()
         {
-            AjustarStatus(StatusNFC.Iniciando,"Inicializando o sistema.");
+            AjustarStatus(StatusNFC.Iniciando, "Inicializando o sistema.");
             await Task.Delay(5000);
 
-            AjustarStatus(StatusNFC.Buscando,"Aproxime o Catão para realizar a busca");
-            
+            AjustarStatus(StatusNFC.Buscando, "Aproxime o Catão para realizar a busca");
+
             await JS.InvokeVoidAsync("LerNFC", ViewRef);
         }
 
         public void Dispose()
         {
-            
+
         }
 
 
@@ -55,7 +57,19 @@ namespace BlazorNFC.Pages.NFC
         [JSInvokable]
         public void LerNFC(string Nome, string ChaveHash, string Chave, string Data)
         {
-            AjustarStatus(StatusNFC.Error, string.Concat("Nome: ", Nome));
+            Model.Nome = Nome;
+            Model.ChaveHash = ChaveHash;
+            Model.Chave = !string.IsNullOrEmpty(Chave) ? Convert.ToInt32(Chave) : 0;
+
+            var DataCartao = string.Empty;
+
+            if (!string.IsNullOrEmpty(Data))
+            {
+                DataCartao = Convert.ToDateTime(Data).ToString("dd/MM/yyyy");
+
+                Model.DataValidade = Convert.ToDateTime(DataCartao);
+            }
+
             StateHasChanged();
         }
 
