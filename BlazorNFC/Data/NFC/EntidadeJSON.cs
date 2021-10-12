@@ -12,6 +12,7 @@ namespace BlazorNFC.Data.NFC
             if (DadosIniciais)
             {
                 DataValidade = DateTime.Now.AddYears(1);
+                Data = DataValidade?.ToString("MM/yy");
                 ChaveHash = GerarChaveHash();
                 Chave = GerarChave();
             }
@@ -23,7 +24,19 @@ namespace BlazorNFC.Data.NFC
 
         public int Chave { get; set; }
 
-        public DateTime? DataValidade { get; set; }
+        private DateTime? _dataValidade;
+        public DateTime? DataValidade 
+        {
+            get => _dataValidade;
+            set 
+            {
+                _dataValidade = value;
+
+                Data = _dataValidade?.ToString("MM/yy");
+            }
+        }
+
+        public string Data { get; set; }
 
         public string GerarChaveHash()
         {

@@ -54,22 +54,42 @@ namespace BlazorNFC.Pages.NFC
 
 
         #region Evento JS
+        //[JSInvokable]
+        //public void LerNFC(string Nome, string ChaveHash, string Chave, string Data)
+        //{
+        //    Model.Nome = Nome;
+        //    Model.ChaveHash = ChaveHash;
+        //    Model.Chave = !string.IsNullOrEmpty(Chave) ? Convert.ToInt32(Chave) : 0;
+        //    Model.Data = Data;
+
+        //    StateHasChanged();
+        //}
+
         [JSInvokable]
-        public void LerNFC(string Nome, string ChaveHash, string Chave, string Data)
+        public void NomeNFC(string Nome)
         {
             Model.Nome = Nome;
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void ChaveHashNFC(string ChaveHash)
+        {
             Model.ChaveHash = ChaveHash;
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void ChaveNFC(string Chave)
+        {
             Model.Chave = !string.IsNullOrEmpty(Chave) ? Convert.ToInt32(Chave) : 0;
+            StateHasChanged();
+        }
 
-            var DataCartao = string.Empty;
-
-            if (!string.IsNullOrEmpty(Data))
-            {
-                DataCartao = Convert.ToDateTime(Data).ToString("dd/MM/yyyy");
-
-                Model.DataValidade = Convert.ToDateTime(DataCartao);
-            }
-
+        [JSInvokable]
+        public void DataNFC(string Data)
+        {
+            Model.Data = Data;
             StateHasChanged();
         }
 
