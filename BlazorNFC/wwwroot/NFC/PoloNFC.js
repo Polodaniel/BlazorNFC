@@ -48,7 +48,7 @@ async function GravarJsonNFC(dotNetHelper, item) {
             dotNetHelper.invokeMethodAsync('ErroNFC', error);
         }
 
-        await dotNetHelper.invokeMethodAsync('GravadoNFC', true);
+        dotNetHelper.invokeMethodAsync('GravadoNFC', true);
     }
     else {
         dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");

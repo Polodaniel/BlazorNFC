@@ -40,7 +40,7 @@ namespace BlazorNFC.Pages.NFC
         protected async void LerCartaoNFC()
         {
             AjustarStatus(StatusNFC.Iniciando, "Inicializando o sistema.");
-            await Task.Delay(5000);
+            await Task.Delay(2000);
 
             AjustarStatus(StatusNFC.Buscando, "Aproxime o Catão para realizar a busca");
 
@@ -49,26 +49,16 @@ namespace BlazorNFC.Pages.NFC
 
         public void Dispose()
         {
-
+            ViewRef?.Dispose();
         }
 
 
         #region Evento JS
-        //[JSInvokable]
-        //public void LerNFC(string Nome, string ChaveHash, string Chave, string Data)
-        //{
-        //    Model.Nome = Nome;
-        //    Model.ChaveHash = ChaveHash;
-        //    Model.Chave = !string.IsNullOrEmpty(Chave) ? Convert.ToInt32(Chave) : 0;
-        //    Model.Data = Data;
-
-        //    StateHasChanged();
-        //}
-
         [JSInvokable]
         public void NomeNFC(string Nome)
         {
             Model.Nome = Nome;
+            AjustarStatus(StatusNFC.Concluido, "Leitura realizada com sucesso!");
             StateHasChanged();
         }
 
@@ -76,6 +66,7 @@ namespace BlazorNFC.Pages.NFC
         public void ChaveHashNFC(string ChaveHash)
         {
             Model.ChaveHash = ChaveHash;
+            AjustarStatus(StatusNFC.Concluido,"Leitura realizada com sucesso!");
             StateHasChanged();
         }
 
@@ -83,6 +74,7 @@ namespace BlazorNFC.Pages.NFC
         public void ChaveNFC(string Chave)
         {
             Model.Chave = !string.IsNullOrEmpty(Chave) ? Convert.ToInt32(Chave) : 0;
+            AjustarStatus(StatusNFC.Concluido,"Leitura realizada com sucesso!");
             StateHasChanged();
         }
 
@@ -90,6 +82,7 @@ namespace BlazorNFC.Pages.NFC
         public void DataNFC(string Data)
         {
             Model.Data = Data;
+            AjustarStatus(StatusNFC.Concluido, "Leitura realizada com sucesso!");
             StateHasChanged();
         }
 
