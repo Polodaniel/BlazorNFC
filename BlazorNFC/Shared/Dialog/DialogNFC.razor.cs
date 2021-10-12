@@ -53,10 +53,9 @@ namespace BlazorNFC.Shared.Dialog
 
         #region Evento JS
         [JSInvokable]
-        public void GravadoNFC(string msg)
+        public void GravadoNFC(bool status)
         {
             AjustarStatus(StatusNFC.Concluido, $"NFC gravado com sucesso!");
-            StateHasChanged();
         }
 
         [JSInvokable]

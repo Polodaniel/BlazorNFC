@@ -36,7 +36,7 @@ async function GravarJsonNFC(dotNetHelper, item) {
                     data: encoder.encode(JSON.stringify({
                         nome: item.nome,
                         chavehash: item.chaveHash,
-                        chave: item.chave,
+                        chaveitem: item.chave,
                         data: item.data,
                     }))
                 }]
@@ -44,11 +44,11 @@ async function GravarJsonNFC(dotNetHelper, item) {
 
             await ndef.write(NovaInformacao);
 
+            dotNetHelper.invokeMethodAsync('GravadoNFC', true);
+
         } catch (error) {
             dotNetHelper.invokeMethodAsync('ErroNFC', error);
         }
-
-        dotNetHelper.invokeMethodAsync('GravadoNFC', true);
     }
     else {
         dotNetHelper.invokeMethodAsync('ErroNFC', "Dispositivo não possui NFC !");
@@ -77,14 +77,10 @@ async function LerNFC(dotNetHelper) {
             for (const record of event.message.records) {
                 if (record.mediaType === "application/json") {
                     const json = JSON.parse(decoder.decode(record.data));
-                    console.log(`Nome: ${json.nome}`);
-                    console.log(`ChaveHash: ${json.chavehash}`);
-                    console.log(`Chave: ${json.chave}`);
-                    console.log(`Data: ${json.data}`);
 
                     dotNetHelper.invokeMethodAsync('NomeNFC', json.nome);
                     dotNetHelper.invokeMethodAsync('ChaveHashNFC', json.chavehash);
-                    dotNetHelper.invokeMethodAsync('ChaveNFC', json.chave);
+                    dotNetHelper.invokeMethodAsync('ChaveNFC', json.chaveitem);
                     dotNetHelper.invokeMethodAsync('DataNFC', json.data);
                 }
             }
